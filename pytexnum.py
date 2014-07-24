@@ -27,6 +27,8 @@ class texnum(object):
         return '{}*10^{}'.format(self._mantissa, self._exponent)
     def tex(self,figs=3,**kwargs):
         dispmant = '{{0:.{}f}}'.format(figs-1).format(float(self._mantissa))
+        if self._exponent == 0 and kwargs.get('display', 'auto') != 'scientific':
+            return dispmant
         if self._mantissa == 1 and not kwargs.get('full', False):
             return '10^{{{}}}'.format(self._exponent)
         return '{}\times10^{{{}}}'.format(dispmant, self._exponent)
