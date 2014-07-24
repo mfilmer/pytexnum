@@ -25,13 +25,24 @@ class texnum(object):
         return 'texnum({}, {})'.format(self._mantissa, self._exponent)
     def __str__(self):
         return '{}*10^{}'.format(self._mantissa, self._exponent)
-    def tex(self,figs=3,**kwargs):
-        dispmant = '{{0:.{}f}}'.format(figs-1).format(float(self._mantissa))
-        if self._exponent == 0 and kwargs.get('display', 'auto') != 'scientific':
-            return dispmant
-        if self._mantissa == 1 and not kwargs.get('full', False):
-            return '10^{{{}}}'.format(self._exponent)
-        return '{}\times10^{{{}}}'.format(dispmant, self._exponent)
+    def tex(self,sigfigs=3,naturalPowers={-1,0,1},display='auto',full=False):
+        # Figure out the display mode
+        if display == 'auto':
+            display = 'natural' if self._exponent in naturalPowers else 'scientific'
+        elif display not in {'scientific','natural'}:
+            raise ValueError('Invalid parameter {} in texnum.tex() call'.
+                    format(display))
+        
+        # Do the displaying
+        dispmant = '{{0:.{}f}}'.format(sigfigs-1).format(float(self._mantissa))
+        if display == 'scientific':
+            if self._mantissa == 1 and not full:
+                return '10^{{{}}}'.format(self._exponent)
+            return '{}\times10^{{{}}}'.format(dispmant, self._exponent)
+        elif display == 'natural':
+            return str(float(dispmant)*10**self._exponent)
+        else:
+            raise Error('It should not be possible to get here')
     
     # Get each of the parts
     def nu(self): return self._num
