@@ -36,14 +36,19 @@ Get a LaTeX string representation
 '5.50\times10^{6}'
 ```
 
-If writing the number in scientific notation would result in 10^0, the number
-is not printed in scientific notation. Override this with the argument
-`display='scientific'`
+If writing the number in scientific notation would result in 10^a, where a is
+between -1 and 1, the number is not printed in scientific notation. Override
+this with the argument `display='scientific'`, or by using the `naturalPowers`
+argument.
 ```python
 >>> texnum(5).tex()
 '5.00'
 >>> texnum(5).tex(display='scientific')
 '5.00\times10^{0}'
+>>> texnum(50).tex()
+'50.0'
+>>> texnum(50).tex(naturalPowers={0})
+'5.00\times10^{1}'
 ```
 
 If the mantissa is 1, it won't be printed.
@@ -60,6 +65,8 @@ The default is 3 significant figures, but you can specify how many you want.
 >>> texnum(5.4321,6).tex()
 '5.43\times10^{6}'
 >>> texnum(5.4321,6).tex(5)
+'5.4321\times10^{6}'
+>>> texnum(5.4321,6).tex(sigfigs=5)
 '5.4321\times10^{6}'
 ```
 
