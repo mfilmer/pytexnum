@@ -36,6 +36,16 @@ Get a LaTeX string representation
 '5.50\times10^{6}'
 ```
 
+If writing the number in scientific notation would result in 10^0, the number
+is not printed in scientific notation. Override this with the argument
+`display='scientific'`
+```python
+>>> texnum(5).tex()
+'5.00'
+>>> texnum(5).tex(display='scientific')
+'5.00\times10^{0}'
+```
+
 If the mantissa is 1, it won't be printed.
 Override this with the argument `full=True`.
 ```python
