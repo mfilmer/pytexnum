@@ -30,7 +30,7 @@ class texnum(object):
     #    return '{}*10^{}'.format(self._mantissa, self._exponent)
     def __str__(self):
         return str(self._num)
-    def tex(self,sigfigs=3,naturalPowers={-1,0,1},display='auto',full=False):
+    def tex(self,sigfigs=3,naturalPowers={-2,-1,0,1,2},display='auto',full=False):
         # Figure out the display mode
         if display == 'auto':
             display = 'natural' if self._exponent in naturalPowers else 'scientific'
@@ -43,7 +43,7 @@ class texnum(object):
         if display == 'scientific':
             if self._mantissa == 1 and not full:
                 return '10^{{{}}}'.format(self._exponent)
-            return '{}\times10^{{{}}}'.format(dispmant, self._exponent)
+            return r'{}\times10^{{{}}}'.format(dispmant, self._exponent)
         elif display == 'natural':
             if -1 < self._num < 1:
                 dispmant = '{{0:.{}f}}'.format(sigfigs).format(float(self._mantissa))
