@@ -13,7 +13,10 @@ class texnum(object):
                 self._num = mantissa._num
             else:
                 self._num = mantissa
-                self._exponent = int(log10(abs(self._num)))
+                if self._num == 0:
+                    self._exponent = 0
+                else:
+                    self._exponent = int(log10(abs(self._num)))
                 self._mantissa = float(self._num) / 10 ** self._exponent
         else:
             self._mantissa = mantissa
@@ -23,8 +26,10 @@ class texnum(object):
     # Display these numbers a variety of ways
     def __repr__(self):
         return 'texnum({}, {})'.format(self._mantissa, self._exponent)
+    #def __str__(self):
+    #    return '{}*10^{}'.format(self._mantissa, self._exponent)
     def __str__(self):
-        return '{}*10^{}'.format(self._mantissa, self._exponent)
+        return str(self._num)
     def tex(self,sigfigs=3,naturalPowers={-1,0,1},display='auto',full=False):
         # Figure out the display mode
         if display == 'auto':
@@ -34,7 +39,7 @@ class texnum(object):
                     format(display))
         
         # Do the displaying
-        dispmant = '{{0:.{}f}}'.format(sigfigs-1).format(float(self._mantissa))
+        dispmant = '{{0:.{}f}}'.format(sigfigs).format(float(self._mantissa))
         if display == 'scientific':
             if self._mantissa == 1 and not full:
                 return '10^{{{}}}'.format(self._exponent)
@@ -73,13 +78,13 @@ class texnum(object):
     def __rmul__(self,other):
         return texnum(other * self._num)
     def __div__(self,other):
-        return texnum(self._num / other)
+        return texnum(float(self._num) / other)
     def __rdiv__(self,other):
-        return texnum(other / self._num)
+        return texnum(other / float(self._num))
     def __floordiv__(self,other):
-        return texnum(self._num // other)
+        return texnum(float(self._num) // other)
     def __rfloordiv__(self,other):
-        return texnum(other // self._num)
+        return texnum(other // float(self._num))
     
     # The assignment operators (+= -+ etc.)
     def __iadd__(self,other):
@@ -114,3 +119,7 @@ class texnum(object):
     def __float__(self):
         return float(self._num)
     
+
+class ctexnum(texnum):
+    def __str__(self):
+        return str(float(self))
