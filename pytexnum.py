@@ -39,12 +39,14 @@ class texnum(object):
                     format(display))
         
         # Do the displaying
-        dispmant = '{{0:.{}f}}'.format(sigfigs).format(float(self._mantissa))
+        dispmant = '{{0:.{}f}}'.format(sigfigs-1).format(float(self._mantissa))
         if display == 'scientific':
             if self._mantissa == 1 and not full:
                 return '10^{{{}}}'.format(self._exponent)
             return '{}\times10^{{{}}}'.format(dispmant, self._exponent)
         elif display == 'natural':
+            if -1 < self._num < 1:
+                dispmant = '{{0:.{}f}}'.format(sigfigs).format(float(self._mantissa))
             return str(float(dispmant)*10**self._exponent)
         else:
             raise Error('It should not be possible to get here')
