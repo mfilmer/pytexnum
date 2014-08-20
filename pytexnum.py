@@ -19,9 +19,14 @@ class texnum(object):
                     self._exponent = int(log10(abs(self._num)))
                 self._mantissa = float(self._num) / 10 ** self._exponent
         else:
-            self._mantissa = mantissa
-            self._exponent = exponent
-            self._num = mantissa * 10 ** exponent
+            if not (1 <= abs(mantissa) < 10):
+                exp = int(log10(abs(mantissa))) - 1
+                self._mantissa = float(mantissa) / 10**exp
+                self._exponent = exponent + exp
+            else:
+                self._mantissa = mantissa
+                self._exponent = exponent
+                self._num = mantissa * 10 ** exponent
     
     # Display these numbers a variety of ways
     def __repr__(self):
