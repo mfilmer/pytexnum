@@ -1,4 +1,4 @@
-from math import log10
+from math import log10, floor
 
 class texnum(object):
     def __init__(self, mantissa, exponent=None):
@@ -16,7 +16,7 @@ class texnum(object):
                 if self._num == 0:
                     self._exponent = 0
                 else:
-                    self._exponent = int(log10(abs(self._num)))
+                    self._exponent = int(floor(log10(abs(self._num))))
                 self._mantissa = float(self._num) / 10 ** self._exponent
         else:
             if not (1 <= abs(mantissa) < 10):
